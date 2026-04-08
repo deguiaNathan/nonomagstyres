@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nono Mags N Tyres — Maintenance Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:         #132043;
+    --navy-dark:    #0B132C;
+    --orange:       #FF5C00;
+    --orange-hover: #E05200;
+    --gray-50:      #F9FAFB;
+    --gray-100:     #F3F4F6;
+    --gray-200:     #E5E7EB;
+    --gray-400:     #9CA3AF;
+    --gray-500:     #6B7280;
+    --gray-900:     #1F2937;
+    --white:        #FFFFFF;
+    --success:      #16A34A;
+    --radius:       10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--gray-900);
+    background: var(--gray-50);
+  }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 264px;
+    flex-shrink: 0;
+    background: var(--navy-dark);
+    color: white;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 0 32px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-logo {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+  }
+  .sidebar-logo h1 { font-size: 14px; font-weight: 800; color: white; line-height: 1.3; }
+  .sidebar-logo span { font-size: 10px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* ── Progress ── */
+  .sidebar-progress {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 4px;
+  }
+  .sidebar-progress .prog-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .prog-count { color: var(--orange); font-weight: 800; }
+  .prog-bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .prog-bar-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  /* ── Session info ── */
+  .sidebar-session {
+    padding: 10px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .sidebar-session .sess-label {
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .sidebar-session .sess-value {
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .sidebar-session .sess-last {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  /* ── Nav ── */
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar nav a:hover { color: white; background: rgba(255,255,255,0.05); }
+  .sidebar nav a.active {
+    color: white;
+    background: rgba(255,255,255,0.09);
+    border-left-color: var(--orange);
+    font-weight: 700;
+  }
+  .cat-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+  .cat-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 1px 7px;
+    white-space: nowrap;
+  }
+  .sidebar nav a.active .cat-badge { background: var(--orange); color: white; }
+  .cat-badge.done { background: var(--success) !important; color: white !important; }
+
+  /* ── Sidebar actions ── */
+  .sidebar-actions {
+    margin-top: auto;
+    padding: 16px 20px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sidebar-btn {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .sidebar-btn-primary { background: var(--orange); color: white; }
+  .sidebar-btn-primary:hover { background: var(--orange-hover); }
+  .sidebar-btn-secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+  .sidebar-btn-secondary:hover { background: rgba(255,255,255,0.14); color: white; }
+
+  /* ── Main ── */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 48px 80px;
+    max-width: 860px;
+  }
+
+  .page-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .page-header .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .page-header p { color: var(--gray-500); font-size: 14px; }
+  .page-header .schedule-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: white;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  /* ── Category sections ── */
+  .category {
+    scroll-margin-top: 36px;
+    margin-bottom: 36px;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .category-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255,92,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .category-header h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .category-header p { font-size: 13px; color: var(--gray-500); margin-top: 1px; }
+  .category-counter {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-400);
+    background: var(--gray-100);
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  .category-counter.done { background: #DCFCE7; color: var(--success); }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 16px;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: background 0.1s;
+  }
+  .check-label:hover { background: var(--gray-50); }
+
+  .check-label input[type="checkbox"] { display: none; }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--gray-200);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, background 0.15s;
+    background: white;
+  }
+  .check-label input:checked ~ .check-box {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .check-label input:checked ~ .check-box::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+    display: block;
+  }
+
+  .check-text {
+    font-size: 14px;
+    color: var(--gray-900);
+    line-height: 1.5;
+    transition: color 0.15s;
+  }
+  .check-label input:checked ~ .check-box ~ .check-text {
+    color: var(--gray-400);
+    text-decoration: line-through;
+  }
+  .check-note {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 2px;
+    text-decoration: none;
+    font-weight: 400;
+  }
+  .check-label input:checked ~ .check-box ~ .check-text .check-note {
+    text-decoration: none;
+  }
+
+  /* ── Card wrapper ── */
+  .card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  /* ── Complete callout ── */
+  .complete-callout {
+    background: #DCFCE7;
+    border: 1px solid #86EFAC;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #15803D;
+    margin-top: 24px;
+  }
+  .complete-callout .callout-icon { font-size: 22px; }
+
+  /* ── Print ── */
+  @media print {
+    .sidebar { display: none; }
+    main { padding: 20px; max-width: 100%; }
+    .check-label:hover { background: none; }
+    .sidebar-btn { display: none; }
+    .check-box {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; }
+    main { padding: 24px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ─────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>Nono Mags N Tyres</h1>
+      <span>Maintenance Checklist</span>
+    </div>
+
+    <div class="sidebar-progress">
+      <div class="prog-label">
+        <span>Progress</span>
+        <span class="prog-count"><span id="prog-text">0 / 27</span></span>
+      </div>
+      <div class="prog-bar-track">
+        <div class="prog-bar-fill" id="prog-bar"></div>
+      </div>
+    </div>
+
+    <div class="sidebar-session">
+      <div class="sess-label">Current session</div>
+      <div class="sess-value" id="sess-label">—</div>
+      <div class="sess-last" id="sess-last"></div>
+    </div>
+
+    <nav>
+      <a href="#security" data-section="security">
+        <span class="cat-icon">🔒</span> Security &amp; Updates
+        <span class="cat-badge" id="badge-security">0 / 6</span>
+      </a>
+      <a href="#shop" data-section="shop">
+        <span class="cat-icon">🛒</span> WooCommerce Shop
+        <span class="cat-badge" id="badge-shop">0 / 7</span>
+      </a>
+      <a href="#performance" data-section="performance">
+        <span class="cat-icon">⚡</span> Performance
+        <span class="cat-badge" id="badge-performance">0 / 4</span>
+      </a>
+      <a href="#content" data-section="content">
+        <span class="cat-icon">✏️</span> Content &amp; Pricing
+        <span class="cat-badge" id="badge-content">0 / 5</span>
+      </a>
+      <a href="#backups" data-section="backups">
+        <span class="cat-icon">💾</span> Backups &amp; Analytics
+        <span class="cat-badge" id="badge-backups">0 / 5</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-actions">
+      <button class="sidebar-btn sidebar-btn-primary" onclick="markComplete()">✓ Mark Complete &amp; Reset</button>
+      <button class="sidebar-btn sidebar-btn-secondary" onclick="resetSession()">↺ Reset without saving</button>
+      <button class="sidebar-btn sidebar-btn-secondary" onclick="window.print()">🖨 Print checklist</button>
+    </div>
+  </aside>
+
+  <!-- ── Main content ─────────────────────────────────────────── -->
+  <main>
+
+    <div class="page-header">
+      <div class="eyebrow">Recurring Maintenance</div>
+      <h1>Twice-Monthly Site Checklist</h1>
+      <p>27 items across 5 categories. Estimated time: ~45 minutes per run.</p>
+      <div class="schedule-badge">📅 Recommended: 1st and 15th of each month</div>
+    </div>
+
+    <!-- SECURITY & UPDATES ───────────────────────────────────── -->
+    <section class="category" id="security">
+      <div class="category-header">
+        <div class="category-icon">🔒</div>
+        <div>
+          <h2>Security &amp; Updates</h2>
+          <p>Keep core, plugins, and SSL current</p>
+        </div>
+        <span class="category-counter" id="counter-security">0 / 6</span>
+      </div>
+      <div class="card">
+        <ul class="checklist">
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="sec-1">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Update WordPress core
+                <span class="check-note">Dashboard › Updates — apply any available core update</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="sec-2">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Update all plugins
+                <span class="check-note">WooCommerce, Bricks, Fluid Checkout, Nono Mags Tyre Search — check Plugins › Installed Plugins</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="sec-3">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Verify child theme is still active after any updates
+                <span class="check-note">Appearance › Themes — confirm "Nono Mags Child" is active, not the parent Bricks theme</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="sec-4">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Run a malware / security scan
+                <span class="check-note">Wordfence (free tier) or equivalent — review any flagged files</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="sec-5">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Review failed login attempts or blocked IPs
+                <span class="check-note">Wordfence › Login Security — investigate unusual activity</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="sec-6">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Confirm SSL certificate is valid
+                <span class="check-note">Visit the live site — padlock must show in browser address bar</span>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- WOOCOMMERCE SHOP ─────────────────────────────────────── -->
+    <section class="category" id="shop">
+      <div class="category-header">
+        <div class="category-icon">🛒</div>
+        <div>
+          <h2>WooCommerce Shop</h2>
+          <p>Products, checkout flow, payments, and orders</p>
+        </div>
+        <span class="category-counter" id="counter-shop">0 / 7</span>
+      </div>
+      <div class="card">
+        <ul class="checklist">
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-1">
+              <span class="check-box"></span>
+              <span class="check-text">
+                All products display correctly with current prices
+                <span class="check-note">Browse /shop/ — check titles, images, prices, and sale badges</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-2">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Tyre size search returns filtered results
+                <span class="check-note">Test: /shop/?tyre_size=205-55-R16 — should show matching products only</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-3">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Add to Cart → Cart → Checkout flow works end-to-end
+                <span class="check-note">Add a product, proceed to checkout — confirm no errors on any step</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-4">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Stripe payment gateway is active
+                <span class="check-note">WooCommerce › Settings › Payments — Stripe should show as enabled</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-5">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Review and action pending or on-hold orders
+                <span class="check-note">WooCommerce › Orders — process or follow up on any outstanding orders</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-6">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Check stock levels — restock or hide out-of-stock products
+                <span class="check-note">Products › All Products — filter by "Out of stock" and update accordingly</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="woo-7">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Free shipping threshold shows correctly at $500
+                <span class="check-note">Add items totalling just over $500 to cart — "Free Delivery" label should appear</span>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PERFORMANCE ─────────────────────────────────────────── -->
+    <section class="category" id="performance">
+      <div class="category-header">
+        <div class="category-icon">⚡</div>
+        <div>
+          <h2>Performance</h2>
+          <p>Speed scores, cache, and server health</p>
+        </div>
+        <span class="category-counter" id="counter-performance">0 / 4</span>
+      </div>
+      <div class="card">
+        <ul class="checklist">
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="perf-1">
+              <span class="check-box"></span>
+              <span class="check-text">
+                PageSpeed Insights — desktop score ≥ 80
+                <span class="check-note">pagespeed.web.dev — test the homepage URL, desktop tab</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="perf-2">
+              <span class="check-box"></span>
+              <span class="check-text">
+                PageSpeed Insights — mobile score ≥ 60
+                <span class="check-note">Same tool, mobile tab — investigate any drops below target</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="perf-3">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Clear server or plugin cache
+                <span class="check-note">Hosting panel cache purge, or caching plugin (WP Rocket, LiteSpeed, etc.)</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="perf-4">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Check hosting disk usage — not approaching limit
+                <span class="check-note">Hosting dashboard — flag if over 80% capacity</span>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTENT & PRICING ───────────────────────────────────── -->
+    <section class="category" id="content">
+      <div class="category-header">
+        <div class="category-icon">✏️</div>
+        <div>
+          <h2>Content &amp; Pricing</h2>
+          <p>Homepage accuracy, offers, and product visuals</p>
+        </div>
+        <span class="category-counter" id="counter-content">0 / 5</span>
+      </div>
+      <div class="card">
+        <ul class="checklist">
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="cont-1">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Featured products on homepage are current and relevant
+                <span class="check-note">Edit Home page in Bricks — swap out seasonal or discontinued featured items</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="cont-2">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Announcement bar text is accurate
+                <span class="check-note">Check phone number, offer text, and any promo messaging is still valid</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="cont-3">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Countdown timer — update end date if expired
+                <span class="check-note">Promo section in Bricks — edit the Countdown element with a new target date</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="cont-4">
+              <span class="check-box"></span>
+              <span class="check-text">
+                All product images load correctly — no broken images
+                <span class="check-note">Browse shop and spot-check individual product pages</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="cont-5">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Review active sale prices — still valid and intentional
+                <span class="check-note">Products › All Products — filter by "On sale" and confirm each is current</span>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- BACKUPS & ANALYTICS ─────────────────────────────────── -->
+    <section class="category" id="backups">
+      <div class="category-header">
+        <div class="category-icon">💾</div>
+        <div>
+          <h2>Backups &amp; Analytics</h2>
+          <p>Data safety and traffic review</p>
+        </div>
+        <span class="category-counter" id="counter-backups">0 / 5</span>
+      </div>
+      <div class="card">
+        <ul class="checklist">
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="bkp-1">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Confirm automated backup completed successfully
+                <span class="check-note">Check your hosting panel's backup section — verify the latest backup date</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="bkp-2">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Verify backup file is accessible and downloadable
+                <span class="check-note">Download and spot-check the backup — a backup you can't restore is not a backup</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="bkp-3">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Review Google Analytics — check traffic vs previous period
+                <span class="check-note">Look for unusual drops in sessions or spikes in bounce rate</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="bkp-4">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Check WooCommerce Analytics — revenue and top products
+                <span class="check-note">WooCommerce › Analytics › Overview — compare to previous period</span>
+              </span>
+            </label>
+          </li>
+          <li>
+            <label class="check-label">
+              <input type="checkbox" data-key="bkp-5">
+              <span class="check-box"></span>
+              <span class="check-text">
+                Check Google Search Console for new 404 errors
+                <span class="check-note">Coverage report — fix or redirect any newly broken URLs</span>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="complete-callout" id="complete-callout">
+      <span class="callout-icon">🎉</span>
+      <span><strong>All 27 items done!</strong> Click <strong>Mark Complete &amp; Reset</strong> in the sidebar to log this session and prepare for the next run.</span>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  const TOTAL = 27;
+  const SECTIONS = [
+    { id: 'security',    prefix: 'sec',  total: 6 },
+    { id: 'shop',        prefix: 'woo',  total: 7 },
+    { id: 'performance', prefix: 'perf', total: 4 },
+    { id: 'content',     prefix: 'cont', total: 5 },
+    { id: 'backups',     prefix: 'bkp',  total: 5 },
+  ];
+
+  // ── Session display ────────────────────────────────────────
+  function updateSessionDisplay() {
+    const lastDate = localStorage.getItem('nmmaint_last_date');
+    const lastRun  = parseInt(localStorage.getItem('nmmaint_last_run') || '0', 10);
+
+    const now    = new Date();
+    const month  = now.toLocaleString('en-NZ', { month: 'long', year: 'numeric' });
+    const runNum = lastDate ? (lastRun % 2) + 1 : 1;
+
+    document.getElementById('sess-label').textContent = month + ' — Run ' + runNum;
+
+    if (lastDate) {
+      const d = new Date(lastDate);
+      document.getElementById('sess-last').textContent =
+        'Last completed: ' + d.toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' });
+    } else {
+      document.getElementById('sess-last').textContent = 'No sessions completed yet';
+    }
+  }
+
+  // ── Restore checkboxes ─────────────────────────────────────
+  document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    const saved = localStorage.getItem('nmmaint_' + cb.dataset.key);
+    if (saved === '1') cb.checked = true;
+    cb.addEventListener('change', () => {
+      localStorage.setItem('nmmaint_' + cb.dataset.key, cb.checked ? '1' : '0');
+      updateAll();
+    });
+  });
+
+  // ── Update progress ────────────────────────────────────────
+  function updateAll() {
+    let totalDone = 0;
+
+    SECTIONS.forEach(s => {
+      const boxes  = document.querySelectorAll(`input[data-key^="${s.prefix}-"]`);
+      const done   = Array.from(boxes).filter(b => b.checked).length;
+      totalDone   += done;
+
+      const counter = document.getElementById('counter-' + s.id);
+      const badge   = document.getElementById('badge-' + s.id);
+      const isDone  = done === s.total;
+
+      if (counter) {
+        counter.textContent = done + ' / ' + s.total;
+        counter.classList.toggle('done', isDone);
+      }
+      if (badge) {
+        badge.textContent = done + ' / ' + s.total;
+        badge.classList.toggle('done', isDone);
+      }
+    });
+
+    const pct = Math.round((totalDone / TOTAL) * 100);
+    document.getElementById('prog-text').textContent = totalDone + ' / ' + TOTAL;
+    document.getElementById('prog-bar').style.width  = pct + '%';
+    document.getElementById('complete-callout').style.display = totalDone === TOTAL ? 'flex' : 'none';
+  }
+
+  // ── Mark complete & reset ──────────────────────────────────
+  window.markComplete = function () {
+    if (!confirm('Mark this session as complete and reset all items for next run?')) return;
+
+    const lastRun = parseInt(localStorage.getItem('nmmaint_last_run') || '0', 10);
+    localStorage.setItem('nmmaint_last_date', new Date().toISOString());
+    localStorage.setItem('nmmaint_last_run', String(lastRun + 1));
+
+    clearCheckboxes();
+    updateSessionDisplay();
+    updateAll();
+  };
+
+  // ── Reset without saving ───────────────────────────────────
+  window.resetSession = function () {
+    if (!confirm('Reset all items without saving completion?')) return;
+    clearCheckboxes();
+    updateAll();
+  };
+
+  function clearCheckboxes() {
+    document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+      localStorage.removeItem('nmmaint_' + cb.dataset.key);
+    });
+  }
+
+  // ── Sidebar active state (IntersectionObserver) ────────────
+  const categories = document.querySelectorAll('.category[id]');
+  const navLinks   = document.querySelectorAll('.sidebar nav a[data-section]');
+
+  const setActive = (id) => {
+    navLinks.forEach(link => link.classList.toggle('active', link.dataset.section === id));
+  };
+
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
+    }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+    categories.forEach(c => obs.observe(c));
+  }
+
+  // ── Init ───────────────────────────────────────────────────
+  updateSessionDisplay();
+  updateAll();
+})();
+</script>
+
+</body>
+</html>

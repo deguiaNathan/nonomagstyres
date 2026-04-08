@@ -1,0 +1,17 @@
+/*
+Theme Name: Nono Mags Exact
+Theme URI: https://example.com/nonomags-exact
+Author: OpenAI Codex
+Description: Importable WordPress theme that renders the current Nono Mags React storefront 1:1 inside WordPress.
+Version: 1.0.0
+Requires at least: 6.5
+Tested up to: 6.8
+Requires PHP: 8.0
+Text Domain: nonomags-exact
+*/
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}

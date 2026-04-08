@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vercel/
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.vscode/
+.claude/
+.idea/
+
+.DS_Store
+Thumbs.db

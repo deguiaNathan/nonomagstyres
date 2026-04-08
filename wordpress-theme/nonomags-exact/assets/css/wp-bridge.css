@@ -1,0 +1,162 @@
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body.nonomags-exact-app-theme {
+  margin: 0;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+body.nonomags-exact-native-theme {
+  margin: 0;
+  background: #f8fafc;
+  color: #1f2937;
+}
+
+body.nonomags-exact-app-theme #root {
+  min-height: 100vh;
+}
+
+body.nonomags-exact-app-theme .nonomags-exact-noscript,
+body.nonomags-exact-app-theme .nonomags-exact-missing-assets {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 9999;
+  transform: translateX(-50%);
+  max-width: min(92vw, 640px);
+  border: 1px solid rgba(11, 19, 44, 0.12);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(11, 19, 44, 0.18);
+  padding: 14px 18px;
+  font: 600 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #132043;
+}
+
+body.nonomags-exact-app-theme .nonomags-exact-noscript code,
+body.nonomags-exact-app-theme .nonomags-exact-missing-assets code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+body.nonomags-exact-app-theme .nonomags-exact-missing-assets p {
+  margin: 0;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-shell {
+  min-height: 100vh;
+  padding: 48px 20px 72px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 92, 0, 0.12), transparent 32%),
+    linear-gradient(180deg, #eef2ff 0%, #f8fafc 28%, #f8fafc 100%);
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-container {
+  max-width: 1184px;
+  margin: 0 auto;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-header {
+  margin-bottom: 28px;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-kicker {
+  margin: 0 0 10px;
+  font: 700 12px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ff5c00;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-header h1 {
+  margin: 0 0 8px;
+  font: 800 clamp(32px, 5vw, 46px)/1.05 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #132043;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-header p {
+  margin: 0;
+  max-width: 640px;
+  color: #475569;
+  font: 500 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel {
+  border: 1px solid rgba(19, 32, 67, 0.1);
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.08);
+  padding: 28px;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce {
+  margin: 0;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce form .form-row input.input-text,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce form .form-row textarea,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce form .form-row select,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .select2-container--default .select2-selection--single {
+  min-height: 48px;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce form .form-row textarea {
+  min-height: 120px;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce button.button,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce #payment #place_order {
+  min-height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: #ff5c00;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce button.button:hover,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce #payment #place_order:hover {
+  background: #e05200;
+  transform: translateY(-1px);
+}
+
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce-error,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce-info,
+body.nonomags-exact-native-theme .nonomags-exact-native-panel .woocommerce-message {
+  border-radius: 16px;
+  border-top-width: 0;
+}
+
+body.admin-bar.nonomags-exact-app-theme header.sticky {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar.nonomags-exact-app-theme header.sticky {
+    top: 46px;
+  }
+}
+
+@media screen and (max-width: 782px) {
+  body.nonomags-exact-native-theme .nonomags-exact-native-shell {
+    padding: 32px 14px 56px;
+  }
+
+  body.nonomags-exact-native-theme .nonomags-exact-native-panel {
+    padding: 18px;
+    border-radius: 22px;
+  }
+}

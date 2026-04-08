@@ -1,0 +1,507 @@
+/*
+Theme Name:   Nono Mags Child
+Template:     bricks
+Description:  Child theme for Nono Mags N Tyres — brand colors, typography, WooCommerce overrides
+Version:      1.0.0
+*/
+
+/* ============================================================
+   BRAND TOKEN LAYER
+   Single source of truth for all brand colors.
+   ============================================================ */
+
+:root {
+  --nm-navy:          #132043;
+  --nm-navy-dark:     #0B132C;
+  --nm-orange:        #FF5C00;
+  --nm-orange-hover:  #E05200;
+  --nm-gray-light:    #F3F4F6;
+  --nm-white:         #FFFFFF;
+  --nm-text-body:     #374151;
+  --nm-text-muted:    #6B7280;
+  --nm-border:        rgba(0, 0, 0, 0.1);
+  --nm-radius:        0.625rem;
+  --nm-shadow-card:   0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --nm-shadow-hover:  0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* ============================================================
+   GLOBAL BASE
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--nm-text-body);
+  background: var(--nm-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; }
+
+a {
+  color: var(--nm-orange);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover { color: var(--nm-orange-hover); }
+
+/* ============================================================
+   BRICKS BUTTON OVERRIDES
+   Global button colors are set in Bricks > Theme Styles > Buttons.
+   These selectors cover any .nm-* custom class buttons and ensure
+   WooCommerce native buttons also pick up brand colors.
+   ============================================================ */
+
+/* Bricks button element with custom .nm-btn class */
+.brxe-button.nm-btn,
+.nm-btn {
+  background-color: var(--nm-orange) !important;
+  border-color: var(--nm-orange) !important;
+  color: var(--nm-white) !important;
+  font-weight: 700;
+  border-radius: var(--nm-radius);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+.brxe-button.nm-btn:hover,
+.nm-btn:hover {
+  background-color: var(--nm-orange-hover) !important;
+  border-color: var(--nm-orange-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   ANNOUNCEMENT BAR
+   Applied as CSS class on a Bricks section.
+   ============================================================ */
+
+.nm-announcement-bar {
+  background-color: var(--nm-navy-dark);
+  color: var(--nm-white);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 16px;
+  letter-spacing: 0.01em;
+}
+.nm-announcement-bar a {
+  color: var(--nm-orange);
+  font-weight: 600;
+}
+
+/* ============================================================
+   STICKY HEADER
+   Applied as CSS class on the Bricks header template section.
+   ============================================================ */
+
+.nm-site-header {
+  background: var(--nm-navy) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Bricks Nav Menu element inside header */
+.nm-site-header .brxe-nav-menu a,
+.nm-site-header nav a {
+  color: var(--nm-white) !important;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+.nm-site-header .brxe-nav-menu a:hover,
+.nm-site-header nav a:hover,
+.nm-site-header .current-menu-item > a {
+  color: var(--nm-orange) !important;
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+
+.nm-hero {
+  min-height: 600px;
+  background-color: var(--nm-navy-dark);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+   REGO / SIZE SEARCH WIDGET
+   Styles for the HTML widget pasted into the hero section.
+   ============================================================ */
+
+.nm-search-widget {
+  background: var(--nm-white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  max-width: 520px;
+}
+
+.nm-search-widget .nm-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--nm-gray-light);
+  margin-bottom: 16px;
+}
+.nm-search-widget .nm-tab-btn {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--nm-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.nm-search-widget .nm-tab-btn.active {
+  color: var(--nm-orange);
+  border-bottom-color: var(--nm-orange);
+}
+.nm-search-widget input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--nm-border);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.nm-search-widget input:focus { border-color: var(--nm-orange); }
+
+.nm-search-widget select {
+  padding: 10px 8px;
+  border: 1.5px solid var(--nm-border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  background: var(--nm-white);
+  transition: border-color 0.2s ease;
+}
+.nm-search-widget select:focus { border-color: var(--nm-orange); }
+
+.nm-search-btn {
+  width: 100%;
+  margin-top: 12px;
+  background: var(--nm-orange);
+  color: var(--nm-white);
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.nm-search-btn:hover { background: var(--nm-orange-hover); }
+
+/* ============================================================
+   TRUST BAR
+   ============================================================ */
+
+.nm-trust-bar {
+  background: var(--nm-white);
+  border-bottom: 1px solid var(--nm-gray-light);
+}
+.nm-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0;
+}
+.nm-trust-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,92,0,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+.nm-trust-item h4 {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--nm-navy);
+  margin: 0 0 2px;
+}
+.nm-trust-item p {
+  font-size: 13px;
+  color: var(--nm-text-muted);
+  margin: 0;
+}
+
+/* ============================================================
+   PROMO SECTION
+   ============================================================ */
+
+.nm-promo-section {
+  background: var(--nm-navy-dark);
+  padding: 80px 0;
+  color: var(--nm-white);
+}
+
+.nm-promo-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.nm-promo-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.08);
+}
+.nm-promo-card.featured {
+  background: var(--nm-orange);
+  border-color: var(--nm-orange);
+}
+
+/* Countdown timer — assign class nm-countdown to the Bricks
+   Countdown element container, nm-countdown-unit to each unit */
+.nm-countdown {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.nm-countdown-unit {
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-align: center;
+  min-width: 56px;
+}
+.nm-countdown-unit .num {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--nm-white) !important;
+}
+.nm-countdown-unit .lbl {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.6) !important;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   WOOCOMMERCE — PRODUCT CARDS (shop loop)
+   ============================================================ */
+
+.woocommerce ul.products li.product {
+  background: var(--nm-white);
+  border: 1px solid var(--nm-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow: var(--nm-shadow-card);
+}
+.woocommerce ul.products li.product:hover {
+  box-shadow: var(--nm-shadow-hover);
+  transform: translateY(-4px);
+}
+
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nm-navy);
+  padding: 0 16px;
+}
+
+.woocommerce ul.products li.product .price {
+  color: var(--nm-orange);
+  font-size: 18px;
+  font-weight: 800;
+  padding: 0 16px;
+}
+.woocommerce ul.products li.product .price del {
+  color: var(--nm-text-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.woocommerce ul.products li.product .button,
+.woocommerce ul.products li.product .add_to_cart_button {
+  background: var(--nm-orange) !important;
+  color: var(--nm-white) !important;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  padding: 10px 20px;
+  margin: 12px 16px 16px;
+  width: calc(100% - 32px);
+  transition: background-color 0.2s ease;
+  display: block;
+}
+.woocommerce ul.products li.product .button:hover {
+  background: var(--nm-orange-hover) !important;
+}
+
+.woocommerce span.onsale {
+  background: var(--nm-orange);
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ============================================================
+   WOOCOMMERCE — SINGLE PRODUCT PAGE
+   ============================================================ */
+
+.woocommerce div.product .product_title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--nm-navy);
+}
+
+.woocommerce div.product p.price,
+.woocommerce div.product span.price {
+  color: var(--nm-orange);
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.woocommerce .single_add_to_cart_button {
+  background: var(--nm-orange) !important;
+  border-color: var(--nm-orange) !important;
+  color: var(--nm-white) !important;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 14px 32px;
+  transition: background-color 0.2s ease;
+}
+.woocommerce .single_add_to_cart_button:hover {
+  background: var(--nm-orange-hover) !important;
+  border-color: var(--nm-orange-hover) !important;
+}
+
+/* ============================================================
+   WOOCOMMERCE — CART & CHECKOUT
+   ============================================================ */
+
+.woocommerce .wc-proceed-to-checkout .checkout-button,
+.woocommerce #place_order {
+  background: var(--nm-orange) !important;
+  border-color: var(--nm-orange) !important;
+  color: var(--nm-white) !important;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+.woocommerce .wc-proceed-to-checkout .checkout-button:hover,
+.woocommerce #place_order:hover {
+  background: var(--nm-orange-hover) !important;
+  border-color: var(--nm-orange-hover) !important;
+}
+
+.nm-gst-note {
+  font-size: 12px;
+  color: var(--nm-text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   ABOUT SECTION
+   ============================================================ */
+
+.nm-about-section {
+  padding: 80px 0;
+  background: var(--nm-gray-light);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.nm-footer {
+  background: var(--nm-navy-dark);
+  color: rgba(255,255,255,0.75);
+  padding: 60px 0 30px;
+}
+.nm-footer h4 {
+  color: var(--nm-white);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.nm-footer a {
+  color: rgba(255,255,255,0.65);
+  font-size: 14px;
+  display: block;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+.nm-footer a:hover { color: var(--nm-orange); }
+.nm-footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 40px;
+  padding-top: 24px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+
+.nm-container {
+  max-width: 1184px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+@media (min-width: 1280px) { .nm-container { max-width: 1280px; } }
+@media (min-width: 1536px) { .nm-container { max-width: 1440px; } }
+
+.nm-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--nm-white);
+}
+.nm-badge-orange { background: var(--nm-orange); }
+.nm-badge-navy   { background: var(--nm-navy); }
+
+.nm-stars { color: var(--nm-orange); font-size: 14px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .nm-hero { min-height: 480px; }
+  .nm-search-widget { max-width: 100%; }
+  .nm-promo-section { padding: 48px 0; }
+  .nm-about-section { padding: 48px 0; }
+  .nm-footer { padding: 40px 0 20px; }
+  .woocommerce div.product .product_title { font-size: 22px; }
+  .woocommerce div.product p.price { font-size: 24px; }
+}

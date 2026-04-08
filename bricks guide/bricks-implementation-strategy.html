@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nono Mags Bricks Implementation Strategy</title>
+  <style>
+    :root {
+      --navy: #132043;
+      --navy-dark: #0b132c;
+      --orange: #ff5c00;
+      --orange-dark: #e05200;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-900: #0f172a;
+      --green-bg: #f0fdf4;
+      --green-border: #bbf7d0;
+      --green-text: #166534;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --amber-text: #92400e;
+      --blue-bg: #eff6ff;
+      --blue-border: #bfdbfe;
+      --blue-text: #1d4ed8;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 12px 40px rgba(15, 23, 42, 0.1);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --content-width: 1220px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 92, 0, 0.08), transparent 24%),
+        linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+      color: var(--slate-700);
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--orange-dark);
+      text-decoration: underline;
+    }
+
+    code {
+      font-family: "Cascadia Code", Consolas, Monaco, monospace;
+      font-size: 0.92em;
+      padding: 0.15rem 0.42rem;
+      border-radius: 8px;
+      border: 1px solid var(--slate-200);
+      background: var(--slate-100);
+      color: var(--navy);
+    }
+
+    .shell {
+      max-width: calc(var(--content-width) + 48px);
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+      padding: 42px;
+      border-radius: 30px;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at top right, rgba(255, 92, 0, 0.18), transparent 24%),
+        linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+      box-shadow: var(--shadow-md);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 92, 0, 0.16);
+      border: 1px solid rgba(255, 92, 0, 0.3);
+      color: #ffd8c2;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      max-width: 13ch;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      padding: 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(203, 213, 225, 0.75);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar h2 {
+      margin: 0 0 14px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--slate-500);
+    }
+
+    .sidebar nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .sidebar nav a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      color: var(--slate-700);
+    }
+
+    .sidebar nav a:hover {
+      background: var(--slate-100);
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    .content {
+      display: grid;
+      gap: 20px;
+    }
+
+    .section {
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow-sm);
+      scroll-margin-top: 24px;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 1.65rem;
+      line-height: 1.15;
+    }
+
+    .section h3 {
+      margin: 26px 0 10px;
+      color: var(--navy);
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+    }
+
+    .section ul,
+    .section ol {
+      margin: 0 0 12px 1.2rem;
+      padding: 0;
+    }
+
+    .section li {
+      margin-bottom: 8px;
+    }
+
+    .callout {
+      margin: 16px 0;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid;
+    }
+
+    .callout strong {
+      color: inherit;
+    }
+
+    .callout.info {
+      background: var(--blue-bg);
+      border-color: var(--blue-border);
+      color: var(--blue-text);
+    }
+
+    .callout.warn {
+      background: var(--amber-bg);
+      border-color: var(--amber-border);
+      color: var(--amber-text);
+    }
+
+    .callout.success {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+      color: var(--green-text);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--slate-200);
+      background: var(--slate-50);
+    }
+
+    .mini-card h4 {
+      margin: 0 0 8px;
+      font-size: 0.96rem;
+      color: var(--navy);
+    }
+
+    .mini-card p,
+    .mini-card ul {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 14px 0 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--slate-100);
+      color: var(--slate-700);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .tag.official {
+      background: #ecfeff;
+      color: #155e75;
+    }
+
+    .tag.inference {
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    table {
+      width: 100%;
+      margin: 16px 0;
+      border-collapse: collapse;
+      border: 1px solid var(--slate-200);
+      border-radius: 18px;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    th {
+      background: var(--navy);
+      color: #ffffff;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #fbfdff;
+    }
+
+    .source-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .source-list {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .source-list li {
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+
+    .footer-note {
+      font-size: 0.92rem;
+      color: var(--slate-500);
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .grid-2,
+      .source-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        padding: 16px;
+      }
+
+      .hero,
+      .section {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="eyebrow">Bricks Guide</div>
+      <h1>Nono Mags Bricks Implementation Strategy</h1>
+      <p>
+        A tightened, Bricks-first guide for translating the current React <code>App.tsx</code> into WordPress.
+        WordPress recommendations stay tied to official WordPress docs, and Bricks builder recommendations are backed by Bricks Academy plus clearly marked inferences.
+      </p>
+      <div class="hero-meta">
+        <span class="pill">Source: <code>src/app/App.tsx</code></span>
+        <span class="pill">Target: WordPress + Bricks</span>
+        <span class="pill">Scope: Homepage-first migration</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Contents</h2>
+        <nav>
+          <a href="#decision">Decision</a>
+          <a href="#snapshot">App Snapshot</a>
+          <a href="#ownership">Ownership</a>
+          <a href="#setup">Bricks Setup</a>
+          <a href="#page-mapping">Page Mapping</a>
+          <a href="#section-map">Section Map</a>
+          <a href="#reuse">Templates vs Components</a>
+          <a href="#guides">Copy-Paste Guides</a>
+          <a href="#widget">Rego Widget</a>
+          <a href="#baseline">Launch Baseline</a>
+          <a href="#unknowns">Unknowns</a>
+          <a href="#sequence">Build Sequence</a>
+          <a href="#sources">Sources</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="section" id="decision">
+          <h2>Decision: Use a Bricks-First Homepage Path</h2>
+          <p>
+            The cleanest implementation path is to assign a normal WordPress page as the static front page and build that page in Bricks, with the header and footer also built as Bricks templates.
+          </p>
+          <div class="callout success">
+            <strong>Recommended path:</strong> homepage page in WordPress, homepage layout in Bricks, header/footer as Bricks templates, and no competing custom <code>front-page.php</code> for this workflow.
+          </div>
+          <div class="tag-row">
+            <span class="tag official">Official: Static front page</span>
+            <span class="tag official">Official: Template hierarchy</span>
+            <span class="tag inference">Inference: avoid a competing PHP front page</span>
+          </div>
+          <p>Why this matters:</p>
+          <ul>
+            <li>WordPress supports a static front page in <code>Settings &gt; Reading</code>.</li>
+            <li><code>front-page.php</code> has precedence in the template hierarchy.</li>
+            <li>Because of that precedence, a separate PHP front-page template can take over the homepage you intended to build in Bricks.</li>
+          </ul>
+          <p>
+            WordPress sources:
+            <a href="https://wordpress.org/documentation/article/create-a-static-front-page/">Create a static front page</a>,
+            <a href="https://developer.wordpress.org/themes/classic-themes/basics/template-hierarchy/">Template hierarchy</a>
+          </p>
+        </section>
+
+        <section class="section" id="snapshot">
+          <h2>What The App Actually Contains</h2>
+          <p>Confirmed from <code>src/app/App.tsx</code>:</p>
+          <ul>
+            <li>A persistent header and footer frame the whole experience.</li>
+            <li>The default <code>home</code> route is a landing page made of hero, trust, promo, featured products, about, and category sections.</li>
+            <li>The SPA also switches to <code>store</code>, <code>checkout</code>, <code>product:*</code>, and <code>implementation</code> views.</li>
+            <li>The current app relies on client-side state for routes and cart behavior rather than real WordPress URLs or product data.</li>
+          </ul>
+          <div class="grid-2">
+            <div class="mini-card">
+              <h4>Important App Anchors</h4>
+              <ul>
+                <li>Header: <code>src/app/App.tsx:64</code></li>
+                <li>Hero search widget: <code>src/app/App.tsx:273</code></li>
+                <li>Trust bar: <code>src/app/App.tsx:384</code></li>
+                <li>Featured products: <code>src/app/App.tsx:410</code></li>
+                <li>Promo section: <code>src/app/App.tsx:555</code></li>
+                <li>About section: <code>src/app/App.tsx:759</code></li>
+                <li>Category section: <code>src/app/App.tsx:832</code></li>
+                <li>Footer: <code>src/app/App.tsx:867</code></li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h4>Migration Boundary</h4>
+              <ul>
+                <li>The homepage layout is ready to migrate visually.</li>
+                <li>The store and checkout behavior are not ready to port 1:1.</li>
+                <li>The <code>implementation</code> route and <code>StyleguidePanel</code> should stay out of production.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="ownership">
+          <h2>Ownership Model</h2>
+          <p>Use WordPress for site ownership, Bricks for the visual build, the child theme for narrow theme glue, and a plugin for business logic.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Owns</th>
+                <th>Should not own</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>WordPress core/site config</td>
+                <td>static front page assignment, page URLs, menus, media library assets, plugin activation</td>
+                <td>detailed visual section assembly</td>
+              </tr>
+              <tr>
+                <td>Bricks</td>
+                <td>header template, footer template, homepage layout, reusable visual sections, page-level SEO/social settings</td>
+                <td>custom PHP request handling</td>
+              </tr>
+              <tr>
+                <td>Child theme</td>
+                <td>small enqueued CSS/JS refinements, theme supports, menu registration if needed</td>
+                <td>fitment logic, API integrations, search parsing</td>
+              </tr>
+              <tr>
+                <td>Custom plugin</td>
+                <td>rego lookup, tyre-size parsing, settings screens, API integrations, shortcode output if needed</td>
+                <td>whole-page visual layout</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            WordPress sources:
+            <a href="https://developer.wordpress.org/themes/advanced-topics/child-themes/">Child themes</a>,
+            <a href="https://developer.wordpress.org/themes/classic-themes/functionality/navigation-menus/">Navigation menus</a>,
+            <a href="https://developer.wordpress.org/reference/functions/register_nav_menus/"><code>register_nav_menus()</code></a>,
+            <a href="https://developer.wordpress.org/plugins/plugin-basics/">Plugin basics</a>
+          </p>
+        </section>
+
+        <section class="section" id="setup">
+          <h2>Bricks Setup Before You Build</h2>
+          <ol>
+            <li>Enable <code>Bricks &gt; Settings &gt; Builder &gt; HTML &amp; CSS to Bricks</code> if you want to use the companion snippets.</li>
+            <li>Use one shared token system for colors, spacing, radii, and buttons instead of ad hoc per-element styling.</li>
+            <li>Use Bricks-native outer structure: <code>Section</code>, then <code>Container</code>, then <code>Block</code>.</li>
+            <li>Style the base breakpoint first, then refine smaller breakpoints in responsive editing.</li>
+            <li>Set homepage metadata and social previews in Bricks Page Settings.</li>
+            <li>Review performance settings before launch.</li>
+          </ol>
+          <div class="callout info">
+            <strong>Bricks layout default:</strong> for this homepage, think in <code>Section &gt; Container &gt; Block</code> and avoid nesting sections inside sections.
+          </div>
+          <p>
+            Bricks Academy sources:
+            <a href="https://academy.bricksbuilder.io/article/html-css-to-bricks/">HTML &amp; CSS to Bricks</a>,
+            <a href="https://academy.bricksbuilder.io/article/layout/">Layout</a>,
+            <a href="https://academy.bricksbuilder.io/article/section-element/">Section element</a>,
+            <a href="https://academy.bricksbuilder.io/article/container-element/">Container element</a>,
+            <a href="https://academy.bricksbuilder.io/article/block-element/">Block element</a>,
+            <a href="https://academy.bricksbuilder.io/article/responsive-editing/">Responsive editing</a>,
+            <a href="https://academy.bricksbuilder.io/article/page-settings/">Page settings</a>,
+            <a href="https://academy.bricksbuilder.io/article/settings/">Settings</a>,
+            <a href="https://academy.bricksbuilder.io/article/asset-loading/">Asset loading</a>
+          </p>
+        </section>
+
+        <section class="section" id="page-mapping">
+          <h2>Concrete Page Mapping</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>React view</th>
+                <th>Observed source</th>
+                <th>WordPress target</th>
+                <th>Bricks responsibility</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>home</code></td>
+                <td><code>src/app/App.tsx:983</code></td>
+                <td>Static front page</td>
+                <td>Build as one Bricks page with reusable sections</td>
+                <td>Ready now</td>
+              </tr>
+              <tr>
+                <td><code>store</code></td>
+                <td><code>src/app/App.tsx:966</code></td>
+                <td>Shop/archive page</td>
+                <td>Archive styling only after the real data/query approach is confirmed</td>
+                <td>Defer logic</td>
+              </tr>
+              <tr>
+                <td><code>product:*</code></td>
+                <td><code>src/app/App.tsx:974</code></td>
+                <td>Single product page</td>
+                <td>Product template only after field mapping is confirmed</td>
+                <td>Defer logic</td>
+              </tr>
+              <tr>
+                <td><code>checkout</code></td>
+                <td><code>src/app/App.tsx:970</code></td>
+                <td>Cart/checkout flow</td>
+                <td>Do not clone the React state machine into production</td>
+                <td>Platform-owned</td>
+              </tr>
+              <tr>
+                <td><code>implementation</code></td>
+                <td><code>src/app/App.tsx:978</code></td>
+                <td>No public page</td>
+                <td>Do not migrate</td>
+                <td>Skip</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="section-map">
+          <h2>Homepage Section Map</h2>
+          <p>This is the safest Bricks mapping for the homepage as it exists today.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>App section</th>
+                <th>Source</th>
+                <th>Recommended Bricks structure</th>
+                <th>Reuse method</th>
+                <th>Safe now</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Header</td>
+                <td><code>src/app/App.tsx:64</code></td>
+                <td>Header template with two stacked rows</td>
+                <td>Template</td>
+                <td>Yes</td>
+                <td>Use WordPress menus; account/cart can stay placeholder visuals</td>
+              </tr>
+              <tr>
+                <td>Hero</td>
+                <td><code>src/app/App.tsx:983</code></td>
+                <td><code>Section &gt; Container &gt; Block</code> two-column layout</td>
+                <td>Direct build or section template</td>
+                <td>Yes</td>
+                <td>Use Media Library assets for the final background and imagery</td>
+              </tr>
+              <tr>
+                <td>Hero search widget</td>
+                <td><code>src/app/App.tsx:273</code></td>
+                <td>Widget shell inside the hero right column</td>
+                <td>Direct build now; plugin or shortcode later if dynamic</td>
+                <td>Visual shell only</td>
+                <td>The current repo only proves the UI, not the backend logic</td>
+              </tr>
+              <tr>
+                <td>Trust bar</td>
+                <td><code>src/app/App.tsx:384</code></td>
+                <td><code>Section &gt; Container &gt; Block(3 items)</code></td>
+                <td>Trust item component if reused</td>
+                <td>Yes</td>
+                <td>Good mini-component candidate if reused elsewhere</td>
+              </tr>
+              <tr>
+                <td>Promo section</td>
+                <td><code>src/app/App.tsx:555</code></td>
+                <td><code>Section &gt; Container &gt; Block</code> header plus grid</td>
+                <td>Promo card component only if reused</td>
+                <td>Static layout only</td>
+                <td>Defer countdown logic until promo data ownership is decided</td>
+              </tr>
+              <tr>
+                <td>Featured products</td>
+                <td><code>src/app/App.tsx:410</code></td>
+                <td><code>Section &gt; Container &gt; Block</code> header plus grid</td>
+                <td>Product card component later if repeated</td>
+                <td>Shell only</td>
+                <td>Do not port the fake product array into WordPress</td>
+              </tr>
+              <tr>
+                <td>About section</td>
+                <td><code>src/app/App.tsx:759</code></td>
+                <td><code>Section &gt; Container &gt; Block</code> two-column layout</td>
+                <td>Direct build or section template</td>
+                <td>Yes</td>
+                <td>Trust badge can stay plain content for now</td>
+              </tr>
+              <tr>
+                <td>Category section</td>
+                <td><code>src/app/App.tsx:832</code></td>
+                <td><code>Section &gt; Container &gt; Block(3 cards)</code></td>
+                <td>Category card component if reused</td>
+                <td>Yes</td>
+                <td>Replace placeholder links with real WordPress destinations</td>
+              </tr>
+              <tr>
+                <td>Footer</td>
+                <td><code>src/app/App.tsx:867</code></td>
+                <td>Footer template</td>
+                <td>Template</td>
+                <td>Yes</td>
+                <td>Use real pages or menus instead of placeholder anchors</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="reuse">
+          <h2>Templates vs Components</h2>
+          <div class="grid-2">
+            <div class="mini-card">
+              <h4>Use Templates</h4>
+              <ul>
+                <li>global header</li>
+                <li>global footer</li>
+                <li>hero section only if you expect repeated insert-and-customize use</li>
+                <li>trust, about, or category sections only if you want repeatable section inserts</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h4>Use Components</h4>
+              <ul>
+                <li>trust item</li>
+                <li>category card</li>
+                <li>promo tile</li>
+                <li>button variants or repeated CTA internals</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout info">
+            <strong>Practical rule:</strong> do not turn every repeated block into a component on day one. Use components when synced updates across multiple pages are genuinely useful.
+          </div>
+          <p>
+            Bricks Academy sources:
+            <a href="https://academy.bricksbuilder.io/article/an-intro-to-templates/">Intro to templates</a>,
+            <a href="https://academy.bricksbuilder.io/article/components/">Components</a>,
+            <a href="https://academy.bricksbuilder.io/article/wireframe-templates/">Wireframe templates</a>
+          </p>
+        </section>
+
+        <section class="section" id="guides">
+          <h2>Copy-Paste Guides Available Now</h2>
+          <p>Use the companion files in this folder when you want Bricks 2.3 starter code for the static parts of the homepage.</p>
+          <div class="grid-2">
+            <div class="mini-card">
+              <h4>Open These</h4>
+              <ul>
+                <li><a href="./bricks-copy-paste-guides.md">bricks-copy-paste-guides.md</a></li>
+                <li><a href="./bricks-copy-paste-guides.html">bricks-copy-paste-guides.html</a></li>
+                <li><a href="./homepage-bricks-build-checklist.md">homepage-bricks-build-checklist.md</a></li>
+                <li><a href="./homepage-bricks-build-checklist.html">homepage-bricks-build-checklist.html</a></li>
+                <li><a href="./hero-widget-bricks-runbook.md">hero-widget-bricks-runbook.md</a></li>
+                <li><a href="./hero-widget-bricks-runbook.html">hero-widget-bricks-runbook.html</a></li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h4>Included Safely</h4>
+              <ul>
+                <li>token seed CSS</li>
+                <li>hero shell with static widget shell</li>
+                <li>trust bar</li>
+                <li>about section</li>
+                <li>category cards</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout warn">
+            <strong>Intentionally excluded:</strong> real rego lookup, tyre-size filtering, WooCommerce product queries, and countdown logic backed by WordPress content.
+          </div>
+        </section>
+
+        <section class="section" id="widget">
+          <h2>Safe Strategy For The Existing Rego Widget Prototype</h2>
+          <p>The current <code>wordpress-theme/nonomags-child/rego-search.php</code> file is useful, but only as a prototype artifact.</p>
+          <ul>
+            <li>It is not a WordPress plugin.</li>
+            <li>It redirects with <code>?rego=</code> and <code>?tyre_size=</code> query strings.</li>
+            <li>It does not define how WordPress should parse those values or filter products.</li>
+          </ul>
+          <div class="callout warn">
+            <strong>Use it now as:</strong> a Bricks UI prototype.<br>
+            <strong>Do not use it now as:</strong> finished WordPress search functionality.
+          </div>
+          <p>If this becomes a real feature later, the safest path is:</p>
+          <ol>
+            <li>Create a dedicated plugin under <code>wp-content/plugins</code>.</li>
+            <li>Add a proper plugin bootstrap file and header.</li>
+            <li>Use the Settings API if options or API keys are needed.</li>
+            <li>Sanitize incoming values and escape output late.</li>
+            <li>Optionally expose the widget through a shortcode so Bricks can place it cleanly.</li>
+          </ol>
+          <p>
+            Sources:
+            <a href="https://academy.bricksbuilder.io/article/html-css-to-bricks/">HTML &amp; CSS to Bricks</a>,
+            <a href="https://academy.bricksbuilder.io/article/custom-code/">Custom Code</a>,
+            <a href="https://developer.wordpress.org/plugins/plugin-basics/">Plugin basics</a>,
+            <a href="https://developer.wordpress.org/plugins/plugin-basics/header-requirements/">Plugin header requirements</a>,
+            <a href="https://developer.wordpress.org/plugins/shortcodes/">Shortcodes</a>,
+            <a href="https://developer.wordpress.org/plugins/settings/settings-api/">Settings API</a>,
+            <a href="https://developer.wordpress.org/apis/security/sanitizing/">Sanitizing</a>,
+            <a href="https://developer.wordpress.org/apis/security/escaping/">Escaping</a>
+          </p>
+        </section>
+
+        <section class="section" id="baseline">
+          <h2>Performance, SEO, and Accessibility Baseline</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Recommended action</th>
+                <th>Type</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Performance</td>
+                <td>Try <code>CSS Loading Method: External Files</code>, then regenerate CSS files</td>
+                <td>Official</td>
+                <td><a href="https://academy.bricksbuilder.io/article/asset-loading/">Asset loading</a></td>
+              </tr>
+              <tr>
+                <td>Performance</td>
+                <td>Disable emojis, embeds, or jQuery migrate only if the site does not need them</td>
+                <td>Official</td>
+                <td><a href="https://academy.bricksbuilder.io/article/settings/">Settings</a></td>
+              </tr>
+              <tr>
+                <td>Performance</td>
+                <td>Prefer local fonts through Bricks Font Manager or Custom Fonts</td>
+                <td>Official</td>
+                <td><a href="https://academy.bricksbuilder.io/article/font-manager/">Font manager</a></td>
+              </tr>
+              <tr>
+                <td>SEO</td>
+                <td>Set permalink, title, metadata, and social sharing details in Bricks Page Settings</td>
+                <td>Official</td>
+                <td><a href="https://academy.bricksbuilder.io/article/page-settings/">Page settings</a></td>
+              </tr>
+              <tr>
+                <td>Accessibility</td>
+                <td>Keep labels, alt text, descriptive links, visible focus states, and semantic structure intact</td>
+                <td>Official</td>
+                <td><a href="https://academy.bricksbuilder.io/article/accessibility/">Accessibility</a></td>
+              </tr>
+              <tr>
+                <td>Project note</td>
+                <td>The current child theme loads Inter from Google; consider moving font handling to Bricks-managed local fonts later</td>
+                <td>Inference</td>
+                <td><a href="https://academy.bricksbuilder.io/article/font-manager/">Font manager</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="unknowns">
+          <h2>Unknowns That Should Stay Unimplemented</h2>
+          <ul>
+            <li>the rego lookup data source</li>
+            <li>the WordPress-side logic behind <code>?rego=</code></li>
+            <li>the WordPress-side logic behind <code>?tyre_size=</code></li>
+            <li>the exact shop filtering plugin or query model</li>
+            <li>whether the account icon links to WordPress users, a custom account page, or nothing</li>
+            <li>whether "Mags &amp; Wheels" and "Combos" are categories, archives, or standalone landing pages</li>
+            <li>whether the promo countdown is driven by post meta, options, or manual content updates</li>
+          </ul>
+          <div class="callout warn">
+            <strong>Implementation rule:</strong> if one of these is still unresolved, leave it out of the build rather than filling the gap with guessed behavior.
+          </div>
+          <h3>What Should Not Be Ported 1:1</h3>
+          <ul>
+            <li><code>CartProvider</code> cart state</li>
+            <li>mock product inventory and client-side filtering</li>
+            <li>simulated checkout totals and order confirmation behavior</li>
+            <li>hard-coded related-product logic</li>
+            <li>the <code>implementation</code> route and <code>StyleguidePanel</code></li>
+          </ul>
+        </section>
+
+        <section class="section" id="sequence">
+          <h2>Recommended Build Sequence</h2>
+          <ol>
+            <li>Create the WordPress homepage page and set it as the static front page.</li>
+            <li>Do not introduce a competing <code>front-page.php</code> while following the Bricks-first homepage path.</li>
+            <li>Build the global Bricks header and footer templates.</li>
+            <li>Set up homepage tokens, classes, and page settings in Bricks.</li>
+            <li>Rebuild the homepage in this order: hero, trust bar, promo shell, featured-products shell, about, category.</li>
+            <li>Use the companion copy-paste guides where a static section can speed up the build.</li>
+            <li>Replace placeholder links, images, and temporary copy with real WordPress content.</li>
+            <li>Defer rego search behavior, product queries, countdown logic, and advanced shop filtering until the backend approach is confirmed.</li>
+          </ol>
+          <p class="footer-note">
+            This sequence is intentionally homepage-first because the homepage is the most presentation-heavy part of the current app and the least dependent on unresolved commerce logic.
+          </p>
+        </section>
+
+        <section class="section" id="sources">
+          <h2>Sources Used</h2>
+          <div class="source-columns">
+            <div class="mini-card">
+              <h4>Bricks Academy</h4>
+              <ul class="source-list">
+                <li><a href="https://academy.bricksbuilder.io/article/html-css-to-bricks/">HTML &amp; CSS to Bricks</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/custom-code/">Custom Code</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/layout/">Layout</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/section-element/">Section element</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/container-element/">Container element</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/block-element/">Block element</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/an-intro-to-templates/">Intro to templates</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/components/">Components</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/wireframe-templates/">Wireframe templates</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/responsive-editing/">Responsive editing</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/page-settings/">Page settings</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/settings/">Settings</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/asset-loading/">Asset loading</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/font-manager/">Font manager</a></li>
+                <li><a href="https://academy.bricksbuilder.io/article/accessibility/">Accessibility</a></li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h4>WordPress</h4>
+              <ul class="source-list">
+                <li><a href="https://wordpress.org/documentation/article/create-a-static-front-page/">Create a static front page</a></li>
+                <li><a href="https://developer.wordpress.org/themes/advanced-topics/child-themes/">Child themes</a></li>
+                <li><a href="https://developer.wordpress.org/themes/classic-themes/basics/template-hierarchy/">Template hierarchy</a></li>
+                <li><a href="https://developer.wordpress.org/themes/classic-themes/functionality/navigation-menus/">Navigation menus</a></li>
+                <li><a href="https://developer.wordpress.org/reference/functions/register_nav_menus/"><code>register_nav_menus()</code></a></li>
+                <li><a href="https://developer.wordpress.org/themes/classic-themes/basics/including-css-javascript/">Including CSS &amp; JavaScript</a></li>
+                <li><a href="https://developer.wordpress.org/reference/functions/wp_enqueue_style/"><code>wp_enqueue_style()</code></a></li>
+                <li><a href="https://developer.wordpress.org/reference/functions/wp_enqueue_script/"><code>wp_enqueue_script()</code></a></li>
+                <li><a href="https://developer.wordpress.org/plugins/plugin-basics/">Plugin basics</a></li>
+                <li><a href="https://developer.wordpress.org/plugins/plugin-basics/header-requirements/">Plugin header requirements</a></li>
+                <li><a href="https://developer.wordpress.org/plugins/shortcodes/">Shortcodes</a></li>
+                <li><a href="https://developer.wordpress.org/plugins/settings/settings-api/">Settings API</a></li>
+                <li><a href="https://developer.wordpress.org/apis/security/sanitizing/">Sanitizing data</a></li>
+                <li><a href="https://developer.wordpress.org/apis/security/escaping/">Escaping data</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
