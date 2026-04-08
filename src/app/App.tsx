@@ -275,117 +275,53 @@ const TagIcon = () => (
 
 const HeroSearchWidget = () => {
   const { navigate } = useNav();
-  const [activeTab, setActiveTab] = useState<'rego' | 'size'>('size');
 
   return (
     <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-md w-full ml-auto border border-slate-200">
-      {/* 
-        Law of Common Region / Gestalt Continuity:
-        Tabs visually connect to the active content area. 
-      */}
-      <div className="flex w-full bg-slate-100" role="tablist">
-        <button 
-          id="tab-rego"
-          role="tab"
-          aria-selected={activeTab === 'rego'}
-          aria-controls="panel-rego"
-          onClick={() => setActiveTab('rego')}
-          className={`flex-1 py-4 text-sm font-bold text-center border-t-4 transition-colors ${
-            activeTab === 'rego' 
-              ? 'border-t-[#FF5C00] text-[#132043] bg-white' 
-              : 'border-t-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50 border-b border-b-slate-200'
-          }`}
-        >
-          Search by Rego
-        </button>
-        <button 
-          id="tab-size"
-          role="tab"
-          aria-selected={activeTab === 'size'}
-          aria-controls="panel-size"
-          onClick={() => setActiveTab('size')}
-          className={`flex-1 py-4 text-sm font-bold text-center border-t-4 transition-colors ${
-            activeTab === 'size' 
-              ? 'border-t-[#FF5C00] text-[#132043] bg-white' 
-              : 'border-t-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50 border-b border-b-slate-200'
-          }`}
-        >
-          Search by Size
-        </button>
+      <div className="border-b border-slate-200 bg-slate-50 px-8 py-4">
+        <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#FF5C00]">Search by Size</p>
+        <p className="mt-1 text-sm text-slate-600">Find the right tyres by entering your exact tyre size.</p>
       </div>
 
       <div className="p-8 bg-white">
-        {activeTab === 'rego' ? (
-          <div id="panel-rego" role="tabpanel" aria-labelledby="tab-rego" className="space-y-5">
+        <div className="space-y-5">
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              {/* NN/g: Labels should be clear and explicitly linked to inputs */}
-              <label htmlFor="rego-input" className="block text-sm font-bold text-slate-800 mb-2">
-                Enter your license plate
-              </label>
-              <div className="relative">
-                <input 
-                  id="rego-input"
-                  type="text" 
-                  placeholder="e.g. ABC123"
-                  className="w-full border-2 border-slate-300 rounded-lg px-4 py-3.5 text-xl font-bold uppercase tracking-wider text-center focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20 transition-all placeholder:text-slate-300 placeholder:font-normal"
-                />
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-6 bg-black rounded flex items-center justify-center text-[10px] text-white font-bold pointer-events-none" aria-hidden="true">
-                  NZ
-                </div>
-              </div>
+              <label htmlFor="size-width" className="block text-xs font-bold text-slate-800 mb-1.5">Width</label>
+              <select id="size-width" className="w-full border-2 border-slate-300 rounded-lg px-2 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20">
+                <option>205</option>
+                <option>215</option>
+                <option>225</option>
+              </select>
             </div>
-            {/* Fitts's Law: Massive CTA area */}
-            <button
-              onClick={() => navigate('store')}
-              className="w-full bg-[#FF5C00] hover:bg-[#E05200] text-white font-bold text-lg py-4 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF5C00]"
-            >
-              Find My Tyres <ArrowRight size={20} aria-hidden="true" />
-            </button>
-            <p className="text-sm text-slate-600 text-center font-medium mt-4 flex items-center justify-center gap-1.5">
-              <CheckCircle size={16} className="text-green-600" aria-hidden="true" /> 
-              Guaranteed fit for your vehicle.
-            </p>
-          </div>
-        ) : (
-          <div id="panel-size" role="tabpanel" aria-labelledby="tab-size" className="space-y-5">
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <label htmlFor="size-width" className="block text-xs font-bold text-slate-800 mb-1.5">Width</label>
-                <select id="size-width" className="w-full border-2 border-slate-300 rounded-lg px-2 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20">
-                  <option>205</option>
-                  <option>215</option>
-                  <option>225</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="size-profile" className="block text-xs font-bold text-slate-800 mb-1.5">Profile</label>
-                <select id="size-profile" className="w-full border-2 border-slate-300 rounded-lg px-2 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20">
-                  <option>55</option>
-                  <option>60</option>
-                  <option>65</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="size-rim" className="block text-xs font-bold text-slate-800 mb-1.5">Rim</label>
-                <select id="size-rim" className="w-full border-2 border-slate-300 rounded-lg px-2 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20">
-                  <option>16"</option>
-                  <option>17"</option>
-                  <option>18"</option>
-                </select>
-              </div>
+            <div>
+              <label htmlFor="size-profile" className="block text-xs font-bold text-slate-800 mb-1.5">Profile</label>
+              <select id="size-profile" className="w-full border-2 border-slate-300 rounded-lg px-2 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20">
+                <option>55</option>
+                <option>60</option>
+                <option>65</option>
+              </select>
             </div>
-            <button
-              onClick={() => navigate('store')}
-              className="w-full bg-[#FF5C00] hover:bg-[#E05200] text-white font-bold text-lg py-4 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF5C00]"
-            >
-              Find My Tyres <ArrowRight size={20} aria-hidden="true" />
-            </button>
-            <p className="text-sm text-slate-600 text-center font-medium mt-4 flex items-center justify-center gap-1.5">
-              <CheckCircle size={16} className="text-green-600" aria-hidden="true" /> 
-              Access NZ's largest inventory.
-            </p>
+            <div>
+              <label htmlFor="size-rim" className="block text-xs font-bold text-slate-800 mb-1.5">Rim</label>
+              <select id="size-rim" className="w-full border-2 border-slate-300 rounded-lg px-2 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#FF5C00] focus:ring-2 focus:ring-[#FF5C00]/20">
+                <option>16"</option>
+                <option>17"</option>
+                <option>18"</option>
+              </select>
+            </div>
           </div>
-        )}
+          <button
+            onClick={() => navigate('store')}
+            className="w-full bg-[#FF5C00] hover:bg-[#E05200] text-white font-bold text-lg py-4 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF5C00]"
+          >
+            Find My Tyres <ArrowRight size={20} aria-hidden="true" />
+          </button>
+          <p className="text-sm text-slate-600 text-center font-medium mt-4 flex items-center justify-center gap-1.5">
+            <CheckCircle size={16} className="text-green-600" aria-hidden="true" /> 
+            Access NZ's largest inventory.
+          </p>
+        </div>
       </div>
     </div>
   );
