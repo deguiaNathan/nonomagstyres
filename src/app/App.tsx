@@ -2,7 +2,7 @@ import React, { Suspense, createContext, lazy, useCallback, useContext, useEffec
 import { 
   ShoppingCart, User, Phone, CheckCircle, 
   Star, ChevronRight, Menu, X, 
-  ShieldCheck, Package, ArrowRight, TrendingUp, ThumbsUp, Wrench
+  ShieldCheck, MapPin, Package, ArrowRight, TrendingUp, ThumbsUp, Wrench
 } from 'lucide-react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import logoUrl from '../assets/logo.png';
@@ -330,12 +330,13 @@ const HeroSearchWidget = () => {
 const TrustBar = () => {
   const items = [
     { icon: <ShieldCheck size={32} className="text-[#FF5C00]" aria-hidden="true" />, title: "100% Fitment Guarantee", desc: "If it doesn't fit, we replace it free." },
+    { icon: <MapPin size={32} className="text-[#FF5C00]" aria-hidden="true" />, title: "200+ Fitting Stations", desc: "Local mechanics ready to install." },
     { icon: <Package size={32} className="text-[#FF5C00]" aria-hidden="true" />, title: "Fast NZ Delivery", desc: "Shipped directly to your fitter." },
   ];
 
   return (
     <section id="trust" className="bg-[#132043] w-full py-12 text-white relative z-10 -mt-8 shadow-xl border-t-4 border-[#FF5C00]">
-      <RevealGroup className={`${CONTAINER} grid grid-cols-1 md:grid-cols-2 gap-8`} stagger={0.14}>
+      <RevealGroup className={`${CONTAINER} grid grid-cols-1 md:grid-cols-3 gap-8`} stagger={0.14}>
         {items.map((item, i) => (
           <RevealItem key={i}>
             <div className="flex items-start gap-4">
