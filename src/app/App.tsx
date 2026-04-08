@@ -279,7 +279,7 @@ const HeroSearchWidget = () => {
   return (
     <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-md w-full ml-auto border border-slate-200">
       <div className="border-b border-slate-200 bg-slate-50 px-8 py-4">
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#FF5C00]">Search by Size</p>
+        <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-[#FF5C00]">Search by Size</h4>
         <p className="mt-1 text-sm text-slate-600">Find the right tyres by entering your exact tyre size.</p>
       </div>
 
@@ -344,7 +344,7 @@ const TrustBar = () => {
                 {item.icon}
               </div>
               <div>
-                <h4 className="font-bold text-lg mb-1.5">{item.title}</h4>
+                <h4 className="font-bold text-lg">{item.title}</h4>
                 <p className="text-sm text-slate-300 leading-relaxed">{item.desc}</p>
               </div>
             </div>
